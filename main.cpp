@@ -2,7 +2,7 @@
 
 string modules[] = {
     "Member Management",
-    "Service Registration/Booking",
+    "Booking/Books View",
     "Appointment Management",
     "Billing",
     "Reporting and Statistics",

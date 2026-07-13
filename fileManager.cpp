@@ -49,11 +49,16 @@ void saveUsers(const vector<User> &users) {
     if (!outFile) return;
 
     for (const auto &u : users) {
+        string booksBorrowedStr;
+        for (const auto &bookName : u.booksBorrowed) {
+            booksBorrowedStr += bookName + ",";
+        }
         outFile << u.userID << "|"
                 << u.userName << "|"
                 << u.isAdmin << "|"
                 << u.borrowedCount << "|"
-                << u.isBlacklisted << "\n";
+                << u.isBlacklisted << "|"
+                << booksBorrowedStr << "\n";
     }
     outFile.close();
 }
@@ -62,6 +67,8 @@ void loadUsers(vector<User> &users) {
     ifstream inFile("users.txt");
     if (!inFile) return;
 
+    cout << "Loading users" << endl;
+
     users.clear();
     string line;
     while (getline(inFile, line)) {
@@ -69,7 +76,7 @@ void loadUsers(vector<User> &users) {
 
         stringstream ss(line);
         User u;
-        string adminStr, borrowStr, blacklistStr;
+        string adminStr, borrowStr, blacklistStr, borrowedBooksStr;
 
         getline(ss, u.userID, '|');
         getline(ss, u.userName, '|');
@@ -80,6 +87,10 @@ void loadUsers(vector<User> &users) {
         u.isAdmin = (adminStr == "1");
         u.borrowedCount = stoi(borrowStr);
         u.isBlacklisted = (blacklistStr == "1");
+        while (getline(ss, borrowedBooksStr, ',')) {
+            u.booksBorrowed.push_back(borrowedBooksStr);
+            cout << borrowedBooksStr << endl;
+        }
 
         users.push_back(u);
     }

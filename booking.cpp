@@ -3,7 +3,7 @@
 
 void serviceRegistration(vector<Book> &books, vector<User> &users) {
     while (true) {
-        cout << "\n=== Service Registration/Booking Sub-Menu ===" << endl;
+        cout << "\n=== Booking Sub-Menu ===" << endl;
         cout << "1. Borrow a Book" << endl;
         cout << "2. Return a Book" << endl;
         cout << "3. Add New Book to Inventory" << endl;
@@ -29,19 +29,12 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
             string uID;
             cin >> uID;
 
-            int userIndex = -1;
-            for (int i = 0; i < users.size(); i++) {
-                if (users[i].userID == uID) {
-                    userIndex = i;
-                    break;
-                }
-            }
-
-            if (userIndex == -1) {
+            auto currentUser = const_cast<User*>(getUserByID(users, uID));
+            if (currentUser == nullptr) {
                 cout << "[ERROR] User ID not found!" << endl;
                 continue;
             }
-            if (!users[userIndex].isBlacklisted) {
+            if (currentUser->isBlacklisted) {
                 cout << "[BLACKLIST] Already blacklisted!" << endl;
                 break;
             }
@@ -69,7 +62,8 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
             }
 
             books[bookIndex].stock--;
-            users[userIndex].borrowedCount++;
+            currentUser->borrowBook(books[bookIndex]);
+            saveUsers(users);
             cout << "[SUCCESS] Book borrowed successfully!" << endl;
         }
         else if (choice == 2) {
@@ -77,16 +71,8 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
             cout << "Enter User ID: ";
             string uID;
             cin >> uID;
-
-            int userIndex = -1;
-            for (int i = 0; i < users.size(); i++) {
-                if (users[i].userID == uID) {
-                    userIndex = i;
-                    break;
-                }
-            }
-
-            if (userIndex == -1) {
+            const User *currentUser = getUserByID(users, uID);
+            if (currentUser == nullptr) {
                 cout << "[ERROR] User ID not found!" << endl;
                 continue;
             }
@@ -108,13 +94,13 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
                 continue;
             }
 
-            if (users[userIndex].borrowedCount <= 0) {
+            if (currentUser->borrowedCount <= 0) {
                 cout << "[ERROR] This user has no borrowed books recorded!" << endl;
                 continue;
             }
 
             books[bookIndex].stock++;
-            users[userIndex].borrowedCount--;
+            currentUser->borrowedCount--;
             cout << "[SUCCESS] Book returned successfully!" << endl;
         }
         else if (choice == 3) {

@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(AMCS2123_Library_System main.cpp
         data.h
-        memberManagement.cpp
+        member.cpp
         booking.cpp
         appointment.cpp
         billing.cpp

@@ -22,9 +22,15 @@ struct Book {
 struct User {
     string userID;
     string userName;
-    bool isAdmin;
-    int borrowedCount;
-    bool isBlacklisted;
+    bool isAdmin = false;
+    mutable int borrowedCount = 0;
+    bool isBlacklisted = false;
+    vector<string> booksBorrowed;
+
+    void borrowBook(const Book &book) {
+        booksBorrowed.push_back(book.name);
+        borrowedCount++;
+    }
 };
 
 struct RoomBooking {
@@ -56,3 +62,23 @@ void saveBooks(const vector<Book> &books);
 void loadBooks(vector<Book> &books);
 void saveUsers(const vector<User> &users);
 void loadUsers(vector<User> &users);
+
+inline bool isUserExists(const vector<User> &users, const string &userID) {
+    bool exists = false;
+    for (auto & user : users) {
+        if (user.userID == userID) {
+            exists = true;
+            break;
+        }
+    }
+    return exists;
+}
+
+inline const User *getUserByID(const vector<User> &users, const string &userID) {
+    for (auto & user : users) {
+        if (user.userID == userID) {
+            return &user;
+        }
+    }
+    return nullptr;
+}

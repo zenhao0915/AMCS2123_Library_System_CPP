@@ -6,10 +6,9 @@ void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions
         cout << "\n--- Blacklist System Sub-Menu ---" << endl;
         cout << "1. Manually Blacklist a Member" << endl;
         cout << "2. Remove Member from Blacklist" << endl;
-        cout << "3. Auto-Scan & Blacklist by Overdue Fines" << endl;
-        cout << "4. View Blacklisted Members" << endl;
-        cout << "5. Return to Main Menu" << endl;
-        cout << "Enter choice (1-5): ";
+        cout << "3. View Blacklisted Members" << endl;
+        cout << "4. Return to Main Menu" << endl;
+        cout << "Enter choice (1-4): ";
 
         int choice;
         cin >> choice;
@@ -21,7 +20,7 @@ void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions
             continue;
         }
 
-        if (choice == 5) break;
+        if (choice == 4) break;
 
         if (choice == 1) {
             cout << "\n[Manual Blacklist]" << endl;
@@ -76,24 +75,6 @@ void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions
             }
         }
         else if (choice == 3) {
-            cout << "\n[Auto-Scanning System Containers...]" << endl;
-            int counter = 0;
-            for (auto &u : users) {
-                double totalUnpaid = 0.0;
-                for (const auto &tx : transactions) {
-                    if (tx.userID == u.userID && !tx.isSettled) {
-                        totalUnpaid += (tx.fineAmount - tx.paidAmount);
-                    }
-                }
-                if (totalUnpaid > 10.0 && !u.isBlacklisted) {
-                    u.isBlacklisted = true;
-                    cout << ">> Auto-Blacklisted: " << u.userName << " (Unpaid Fine: RM " << fixed << setprecision(2) << totalUnpaid << ")" << endl;
-                    counter++;
-                }
-            }
-            cout << "[SCAN COMPLETED] " << counter << " members automatically added to blacklist." << endl;
-        }
-        else if (choice == 4) {
             cout << "\n========================================" << endl;
             cout << "        BLACKLISTED MEMBERS LIST        " << endl;
             cout << "========================================" << endl;

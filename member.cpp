@@ -15,11 +15,20 @@ bool isUserIdDuplicate(const string &id, const vector<User> &users) {
     return false;
 }
 
+bool isUserNameDuplicate(const string &name, const vector<User> &users) {
+    for (const auto &user: users) {
+        if (user.userName == name) return true;
+    }
+    return false;
+}
+
 void memberManagement(vector<User> &users) {
     while (true) {
         cout << "\n=== Member Management Sub-Menu ===" << endl;
-        cout << "1. Register New Member\n2. View Member Details\n3. Update Member Profile\n4. Return to Main Menu" <<
-                endl;
+        cout << "1. Register New Member" << endl;
+        cout << "2. View Member Details" << endl;
+        cout << "3. Update Member Profile" << endl;
+        cout << "4. Return to Main Menu" << endl;
         cout << "Enter choice (1-4): ";
 
         int subChoice;
@@ -41,7 +50,7 @@ void memberManagement(vector<User> &users) {
                     cout << "Enter User ID: ";
                     cin >> newUser.userID;
                     if (isUserIdDuplicate(newUser.userID, users)) {
-                        cout << "[ERROR] User ID already exists! Please use a unique ID." << endl;
+                        cout << "[ERROR] User ID already exists! Please use an unique ID." << endl;
                     } else {
                         break;
                     }
@@ -53,6 +62,8 @@ void memberManagement(vector<User> &users) {
                     getline(cin, newUser.userName);
                     if (!isValidName(newUser.userName)) {
                         cout << "[ERROR] Invalid name! Name cannot contain digits." << endl;
+                    } else if (isUserNameDuplicate(newUser.userName, users)) {
+                        cout << "[ERROR] UserName already exists! Please use an unique username." << endl;
                     } else {
                         break;
                     }
@@ -62,9 +73,6 @@ void memberManagement(vector<User> &users) {
                 cout << "Is this user an Admin? (Y/N): ";
                 cin >> adminChar;
                 newUser.isAdmin = (adminChar == 'Y' || adminChar == 'y');
-
-                newUser.borrowedCount = 0;
-                newUser.isBlacklisted = false;
 
                 users.push_back(newUser);
                 cout << "[SUCCESS] Member registered successfully!" << endl;
@@ -116,12 +124,6 @@ void memberManagement(vector<User> &users) {
                                 break;
                             }
                         }
-
-                        char adminChar;
-                        cout << "Change Admin status? (Y/N): ";
-                        cin >> adminChar;
-                        user.isAdmin = (adminChar == 'Y' || adminChar == 'y');
-
                         cout << "[SUCCESS] Profile updated successfully!" << endl;
                         break;
                     }
