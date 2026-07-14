@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "data.h"
 
 string modules[] = {
@@ -8,6 +10,7 @@ string modules[] = {
     "Reporting and Statistics",
     "(Extra) Top 5 Hot Topics Book",
     "(Extra) Blacklist System",
+    "Logout",
     "Exit"
 };
 
@@ -15,10 +18,21 @@ void printMenu() {
     cout << "\n\tMenu" << endl;
     for (int i = 0; i < 22; i++) cout << "=";
     cout << endl;
-    for (int i = 0; i < size(modules); i++) {
-        cout << i + 1 << ". " << modules[i] << endl;
+    if (hasUserLoggedIn()) {
+        for (int i = 0; i < size(modules); i++) {
+            if (i + 1 == size(modules)) {
+                cout << "0. " << modules[i] << endl;
+                break;
+            }
+            cout << i + 1 << ". " << modules[i] << endl;
+        }
+        cout << endl << "Enter Current Navigation(0-8): ";
+    } else {
+        cout << "1. Register User" << endl;
+        cout << "2. Login User" << endl;
+        cout << "0. Exit" << endl;
+        cout << endl << "Enter Current Navigation(0-2): ";
     }
-    cout << endl << "Enter Current Navigation(1-8): ";
 }
 
 int main() {
@@ -40,23 +54,62 @@ int main() {
             cout << "\nInvalid input! Please enter a valid number." << endl;
             continue;
         }
-        if (currentSelection < 1 || currentSelection > size(modules)) {
-            cout << "\nChoice out of range! Please enter a number between 1 and " << size(modules) << "." << endl;
+        int selectionRange;
+        if (hasUserLoggedIn()) {
+            selectionRange = size(modules);
+        } else {
+            selectionRange = 2;
+        }
+        if (currentSelection < 0 || currentSelection > selectionRange) {
+            cout << "\nChoice out of range! Please enter a number between 1 and " << selectionRange << "." << endl;
             continue;
         }
 
-        if (currentSelection == size(modules)) {
+        if (currentSelection == 0) {
             saveUsers(users);
             saveBooks(books);
             break;
         }
-
+        if (!hasUserLoggedIn()) {
+            switch (currentSelection) {
+                case 1: {
+                    // Register
+                    string userID;
+                    string userName;
+                    string userPassword;
+                    cin.ignore(10000, '\n');
+                    cout << "\n[REGISTER] Enter UserID: ";
+                    getline(cin, userID);
+                    cout << "\n[REGISTER] Enter UserName: ";
+                    getline(cin, userName);
+                    cout << "\n[REGISTER] Enter Password: ";
+                    getline(cin, userPassword);
+                    registerUser(users, userID, userName, userPassword);
+                    break;
+                }
+                case 2: {
+                    // Login
+                    string userID;
+                    string userPassword;
+                    cin.ignore(10000, '\n');
+                    cout << "\n[LOGIN] Enter UserID: ";
+                    getline(cin, userID);
+                    cout << "\n[LOGIN] Enter Password: ";
+                    getline(cin, userPassword);
+                    loginToUser(users, userID, userPassword);
+                    break;
+                }
+                default: break;
+            }
+            continue;
+        }
+        assert(currentUser != nullptr);
         switch (currentSelection) {
             case 1:
-                memberManagement(users);
+                memberManagement(users, currentUser);
                 break;
             case 2:
-                serviceRegistration(books, users);
+                bookingService(books, users);
                 break;
             case 3:
                 appointmentManagement(books, users, roomBookings);
@@ -73,9 +126,11 @@ int main() {
             case 7:
                 extraBlacklist(users, transactions);
                 break;
-            default: {
+            case 8: {
+                logoutUser();
                 break;
             }
+            default: break;
         }
     }
     cout << "\nThank you for using Library Management System. Program End!" << endl;

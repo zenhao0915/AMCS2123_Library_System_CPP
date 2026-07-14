@@ -4,7 +4,7 @@ void saveBooks(const vector<Book> &books) {
     ofstream outFile("books.txt");
     if (!outFile) return;
 
-    for (const auto &b : books) {
+    for (const auto &b: books) {
         outFile << b.bookID << "|"
                 << b.name << "|"
                 << b.author << "|"
@@ -44,17 +44,21 @@ void loadBooks(vector<Book> &books) {
     inFile.close();
 }
 
-void saveUsers(const vector<User> &users) {
+void saveUsers(vector<User> &users) {
     ofstream outFile("users.txt");
     if (!outFile) return;
 
-    for (const auto &u : users) {
+    for (auto &u: users) {
+        if (currentUser != nullptr && u.passwordHash == currentUser->passwordHash && u.userID == currentUser->userID) {
+            u.userName = currentUser->userName;
+        }
         string booksBorrowedStr;
-        for (const auto &bookName : u.booksBorrowed) {
+        for (const auto &bookName: u.booksBorrowed) {
             booksBorrowedStr += bookName + ",";
         }
         outFile << u.userID << "|"
                 << u.userName << "|"
+                << u.passwordHash << "|"
                 << u.isAdmin << "|"
                 << u.borrowedCount << "|"
                 << u.isBlacklisted << "|"
@@ -67,8 +71,6 @@ void loadUsers(vector<User> &users) {
     ifstream inFile("users.txt");
     if (!inFile) return;
 
-    cout << "Loading users" << endl;
-
     users.clear();
     string line;
     while (getline(inFile, line)) {
@@ -76,20 +78,24 @@ void loadUsers(vector<User> &users) {
 
         stringstream ss(line);
         User u;
-        string adminStr, borrowStr, blacklistStr, borrowedBooksStr;
+        string adminStr, borrowStr, blacklistStr, borrowedBooksStr, hashStr;
+        hash<string> pwd;
 
         getline(ss, u.userID, '|');
         getline(ss, u.userName, '|');
+        getline(ss, hashStr, '|');
         getline(ss, adminStr, '|');
         getline(ss, borrowStr, '|');
         getline(ss, blacklistStr, '|');
 
+        if (!hashStr.empty()) {
+            u.passwordHash = stoull(hashStr);
+        }
         u.isAdmin = (adminStr == "1");
         u.borrowedCount = stoi(borrowStr);
         u.isBlacklisted = (blacklistStr == "1");
         while (getline(ss, borrowedBooksStr, ',')) {
             u.booksBorrowed.push_back(borrowedBooksStr);
-            cout << borrowedBooksStr << endl;
         }
 
         users.push_back(u);
