@@ -1,20 +1,20 @@
 #include "data.h"
 
-
-void serviceRegistration(vector<Book> &books, vector<User> &users) {
+void bookingService(vector<Book> &books, vector<User> &users) {
     while (true) {
         cout << "\n=== Booking Sub-Menu ===" << endl;
         cout << "1. Borrow a Book" << endl;
         cout << "2. Return a Book" << endl;
-        cout << "3. Add New Book to Inventory" << endl;
-        cout << "4. View All Books" << endl;
-        cout << "5. Return to Main Menu" << endl;
-        cout << "Enter choice (1-5): ";
+        cout << "3. Display Borrowed Book(s)" << endl;
+        cout << "4. Add New Book to Inventory" << endl;
+        cout << "5. View All Books" << endl;
+        cout << "6. Return to Main Menu" << endl;
+        cout << "Enter choice (1-6): ";
 
         int choice;
         cin >> choice;
 
-        if (cin.fail() || choice < 1 || choice > 5) {
+        if (cin.fail() || choice < 1 || choice > 6) {
             cin.clear();
             cin.ignore(10000, '\n');
             cout << "[ERROR] Invalid choice! Try again." << endl;
@@ -25,11 +25,6 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
 
         if (choice == 1) {
             cout << "\n[Borrow a Book]" << endl;
-            cout << "Enter User ID: ";
-            string uID;
-            cin >> uID;
-
-            auto currentUser = const_cast<User*>(getUserByID(users, uID));
             if (currentUser == nullptr) {
                 cout << "[ERROR] User ID not found!" << endl;
                 continue;
@@ -68,10 +63,6 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
         }
         else if (choice == 2) {
             cout << "\n[Return a Book]" << endl;
-            cout << "Enter User ID: ";
-            string uID;
-            cin >> uID;
-            const User *currentUser = getUserByID(users, uID);
             if (currentUser == nullptr) {
                 cout << "[ERROR] User ID not found!" << endl;
                 continue;
@@ -102,8 +93,14 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
             books[bookIndex].stock++;
             currentUser->borrowedCount--;
             cout << "[SUCCESS] Book returned successfully!" << endl;
-        }
-        else if (choice == 3) {
+        } else if (choice == 3) {
+            cout << "[Books] Books Borrowed By User: " << endl;
+            int count = 1;
+            for (const auto &bookName : currentUser->booksBorrowed) {
+                cout << count << ". " << bookName << endl;
+                count++;
+            }
+        } else if (choice == 4) {
             cout << "\n[Add New Book]" << endl;
             Book newBook;
 
@@ -146,7 +143,7 @@ void serviceRegistration(vector<Book> &books, vector<User> &users) {
             books.push_back(newBook);
             cout << "[SUCCESS] Book added to inventory!" << endl;
         }
-        else if (choice == 4) {
+        else if (choice == 5) {
             cout << "\n[View All Books]" << endl;
             if (books.empty()) {
                 cout << "No books in inventory." << endl;
