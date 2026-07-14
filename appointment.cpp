@@ -1,6 +1,6 @@
 #include "data.h"
 
-void appointmentManagement(vector<Book> &books, const vector<User> &users, vector<RoomBooking> &roomBookings) {
+void appointmentManagement(vector<Book> &books, const vector<User> &users, vector<RoomBooking> &roomBookings, User *currentUser) {
     while (true) {
         cout << "\n--- Appointment Management Sub-Menu ---" << endl;
         cout << "1. Reserve an Out-of-Stock Book" << endl;
@@ -24,25 +24,10 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
 
         if (choice == 1) {
             cout << "\n[Reserve an Out-of-Stock Book]" << endl;
-            cout << "Enter User ID: ";
-            string uID;
-            cin >> uID;
-
-            bool userExists = false;
-            for (const auto &u : users) {
-                if (u.userID == uID) {
-                    userExists = true;
-                    break;
-                }
-            }
-            if (!userExists) {
-                cout << "[ERROR] User ID not found!" << endl;
-                continue;
-            }
-
             cout << "Enter Book ID to reserve: ";
             string bID;
             cin >> bID;
+            cin.ignore(10000, '\n');
 
             int bookIndex = -1;
             for (int i = 0; i < books.size(); i++) {
@@ -72,30 +57,16 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
         }
         else if (choice == 2) {
             cout << "\n[Book a Study Room]" << endl;
-            cout << "Enter User ID: ";
-            string uID;
-            cin >> uID;
-
-            bool userExists = false;
-            for (const auto &u : users) {
-                if (u.userID == uID) {
-                    userExists = true;
-                    break;
-                }
-            }
-            if (!userExists) {
-                cout << "[ERROR] User ID not found!" << endl;
-                continue;
-            }
-
             RoomBooking newBooking;
-            newBooking.userID = uID;
+            newBooking.userID = currentUser->userID;
 
             cout << "Enter Room ID (e.g., R01, R02): ";
             cin >> newBooking.roomID;
+            cin.ignore(10000, '\n');
 
             cout << "Enter Date (DD-MM-YYYY): ";
             cin >> newBooking.date;
+            cin.ignore(10000, '\n');
 
             while (true) {
                 cout << "Select Time Slot (1: Morning, 2: Afternoon, 3: Evening): ";
@@ -164,7 +135,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             cout << "--------------------------------------------------------" << endl;
             for (const auto &rb : roomBookings) {
                 string slotName = (rb.timeSlot == 1) ? "Morning" : (rb.timeSlot == 2) ? "Afternoon" : "Evening";
-                cout << "User: " << rb.userID << " | Room: " << rb.roomID 
+                cout << "User: " << rb.userID << " | Room: " << rb.roomID
                      << " | Date: " << rb.date << " | Slot: " << slotName << endl;
             }
             cout << "--------------------------------------------------------" << endl;

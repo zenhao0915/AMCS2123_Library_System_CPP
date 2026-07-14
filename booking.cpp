@@ -1,6 +1,7 @@
 #include "data.h"
 
-void bookingService(vector<Book> &books, vector<User> &users) {
+void bookingService(vector<Book> &books, vector<User> &users, User *currentUser) {
+    assert(currentUser != nullptr);
     while (true) {
         cout << "\n=== Booking Sub-Menu ===" << endl;
         cout << "1. Borrow a Book" << endl;
@@ -21,14 +22,10 @@ void bookingService(vector<Book> &books, vector<User> &users) {
             continue;
         }
 
-        if (choice == 5) break;
+        if (choice == 6) break;
 
         if (choice == 1) {
             cout << "\n[Borrow a Book]" << endl;
-            if (currentUser == nullptr) {
-                cout << "[ERROR] User ID not found!" << endl;
-                continue;
-            }
             if (currentUser->isBlacklisted) {
                 cout << "[BLACKLIST] Already blacklisted!" << endl;
                 break;
@@ -58,16 +55,11 @@ void bookingService(vector<Book> &books, vector<User> &users) {
 
             books[bookIndex].stock--;
             currentUser->borrowBook(books[bookIndex]);
-            saveUsers(users);
+            saveUsers(users, currentUser);
             cout << "[SUCCESS] Book borrowed successfully!" << endl;
         }
         else if (choice == 2) {
             cout << "\n[Return a Book]" << endl;
-            if (currentUser == nullptr) {
-                cout << "[ERROR] User ID not found!" << endl;
-                continue;
-            }
-
             cout << "Enter Book ID: ";
             string bID;
             cin >> bID;
@@ -94,13 +86,19 @@ void bookingService(vector<Book> &books, vector<User> &users) {
             currentUser->borrowedCount--;
             cout << "[SUCCESS] Book returned successfully!" << endl;
         } else if (choice == 3) {
-            cout << "[Books] Books Borrowed By User: " << endl;
+            cout << endl << "[Books] Books Borrowed By User: " << endl;
+            if (currentUser->booksBorrowed.empty()) {
+                cout << "[ERROR] No books borrowed!" << endl;
+                continue;
+            }
             int count = 1;
             for (const auto &bookName : currentUser->booksBorrowed) {
                 cout << count << ". " << bookName << endl;
                 count++;
             }
         } else if (choice == 4) {
+            if (!currentUser->hasPermission()) continue;
+
             cout << "\n[Add New Book]" << endl;
             Book newBook;
 

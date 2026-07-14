@@ -1,5 +1,3 @@
-#include <assert.h>
-
 #include "data.h"
 
 string modules[] = {
@@ -14,11 +12,11 @@ string modules[] = {
     "Exit"
 };
 
-void printMenu() {
+void printMenu(const Session& session) {
     cout << "\n\tMenu" << endl;
     for (int i = 0; i < 22; i++) cout << "=";
     cout << endl;
-    if (hasUserLoggedIn()) {
+    if (session.hasUserLoggedIn()) {
         for (int i = 0; i < size(modules); i++) {
             if (i + 1 == size(modules)) {
                 cout << "0. " << modules[i] << endl;
@@ -41,12 +39,13 @@ int main() {
     vector<Book> books;
     vector<RoomBooking> roomBookings;
     vector<Transaction> transactions;
+    Session session;
 
     loadUsers(users);
     loadBooks(books);
 
     while (true) {
-        printMenu();
+        printMenu(session);
         cin >> currentSelection;
         if (cin.fail()) {
             cin.clear();
@@ -55,7 +54,7 @@ int main() {
             continue;
         }
         int selectionRange;
-        if (hasUserLoggedIn()) {
+        if (session.hasUserLoggedIn()) {
             selectionRange = size(modules);
         } else {
             selectionRange = 2;
@@ -66,11 +65,11 @@ int main() {
         }
 
         if (currentSelection == 0) {
-            saveUsers(users);
+            saveUsers(users, nullptr);
             saveBooks(books);
             break;
         }
-        if (!hasUserLoggedIn()) {
+        if (!session.hasUserLoggedIn()) {
             switch (currentSelection) {
                 case 1: {
                     // Register
@@ -78,13 +77,13 @@ int main() {
                     string userName;
                     string userPassword;
                     cin.ignore(10000, '\n');
-                    cout << "\n[REGISTER] Enter UserID: ";
+                    cout << "[REGISTER] Enter UserID: ";
                     getline(cin, userID);
-                    cout << "\n[REGISTER] Enter UserName: ";
+                    cout << "[REGISTER] Enter UserName: ";
                     getline(cin, userName);
-                    cout << "\n[REGISTER] Enter Password: ";
+                    cout << "[REGISTER] Enter Password: ";
                     getline(cin, userPassword);
-                    registerUser(users, userID, userName, userPassword);
+                    session.registerUser(users, userID, userName, userPassword);
                     break;
                 }
                 case 2: {
@@ -92,27 +91,32 @@ int main() {
                     string userID;
                     string userPassword;
                     cin.ignore(10000, '\n');
-                    cout << "\n[LOGIN] Enter UserID: ";
+                    cout << "[LOGIN] Enter UserID: ";
                     getline(cin, userID);
-                    cout << "\n[LOGIN] Enter Password: ";
+                    if (!Session::isUserExists(users, userID)) {
+                        cout << "[ERROR] User " << userID << " does not exist." << endl;
+                        break;
+                    }
+                    cout << "[LOGIN] Enter Password: ";
                     getline(cin, userPassword);
-                    loginToUser(users, userID, userPassword);
+                    session.loginToUser(users, userID, userPassword);
                     break;
                 }
                 default: break;
             }
             continue;
         }
-        assert(currentUser != nullptr);
+        User *currentUser = session.getCurrentUser();
+        if (currentUser == nullptr) continue;
         switch (currentSelection) {
             case 1:
                 memberManagement(users, currentUser);
                 break;
             case 2:
-                bookingService(books, users);
+                bookingService(books, users, currentUser);
                 break;
             case 3:
-                appointmentManagement(books, users, roomBookings);
+                appointmentManagement(books, users, roomBookings, currentUser);
                 break;
             case 4:
                 billingPayment(users, transactions);
@@ -127,7 +131,7 @@ int main() {
                 extraBlacklist(users, transactions);
                 break;
             case 8: {
-                logoutUser();
+                session.logoutUser();
                 break;
             }
             default: break;

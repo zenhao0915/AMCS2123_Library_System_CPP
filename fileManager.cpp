@@ -44,7 +44,7 @@ void loadBooks(vector<Book> &books) {
     inFile.close();
 }
 
-void saveUsers(vector<User> &users) {
+void saveUsers(vector<User> &users, const User *currentUser) {
     ofstream outFile("users.txt");
     if (!outFile) return;
 

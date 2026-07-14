@@ -24,16 +24,16 @@ void memberManagement(vector<User> &users, User *user) {
                 cout << "Enter User ID to search: ";
                 string searchID;
                 cin >> searchID;
-
+                cin.ignore(10000, '\n');
                 bool found = false;
-                for (const auto &user: users) {
-                    if (user.userID == searchID) {
+                for (const auto &u: users) {
+                    if (u.userID == searchID) {
                         cout << "\n-----------------------------------" << endl;
-                        cout << "User ID        : " << user.userID << endl;
-                        cout << "Name           : " << user.userName << endl;
-                        cout << "Role           : " << (user.isAdmin ? "Admin" : "Standard Member") << endl;
-                        cout << "BlackList      : " << (user.isBlacklisted ? "True" : "False") << endl;
-                        cout << "Borrowed Books : " << user.borrowedCount << " items" << endl;
+                        cout << "User ID        : " << u.userID << endl;
+                        cout << "Name           : " << u.userName << endl;
+                        cout << "Role           : " << (u.isAdmin ? "Admin" : "Standard Member") << endl;
+                        cout << "BlackList      : " << (u.isBlacklisted ? "True" : "False") << endl;
+                        cout << "Borrowed Books : " << u.borrowedCount << " items" << endl;
                         cout << "-----------------------------------" << endl;
                         found = true;
                         break;
@@ -47,16 +47,16 @@ void memberManagement(vector<User> &users, User *user) {
                 cout << "Enter User ID to update: ";
                 string searchID;
                 cin >> searchID;
-
+                cin.ignore(10000, '\n');
                 string newName;
                 while (true) {
                     cout << "Enter New Name (Current: " << user->userName << "): ";
                     getline(cin, newName);
-                    if (!isValidName(newName)) {
+                    if (!Session::isValidName(newName)) {
                         cout << "[ERROR] Invalid name! Name cannot contain digits." << endl;
                     } else {
                         user->userName = newName;
-                        saveUsers(users);
+                        saveUsers(users, user);
                         break;
                     }
                 }
