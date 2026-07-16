@@ -1,6 +1,34 @@
 #include "data.h"
 
-void appointmentManagement(vector<Book> &books, const vector<User> &users, vector<RoomBooking> &roomBookings, User *currentUser) {
+bool isValidDate(const string &dateStr) {
+    if (dateStr.length() != 10) return false;
+
+    if (dateStr[2] != '-' || dateStr[5] != '-') return false;
+
+    for (int i = 0; i < 10; i++) {
+        if (i == 2 || i == 5) continue;
+        if (!isdigit(dateStr[i])) return false;
+    }
+
+    const int day = stoi(dateStr.substr(0, 2));
+    const int month = stoi(dateStr.substr(3, 2));
+    const int year = stoi(dateStr.substr(6, 4));
+
+    if (year != 2026) return false;
+    if (month < 1 || month > 12) return false;
+
+    int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+        daysInMonth[2] = 29;
+    }
+
+    if (day < 1 || day > daysInMonth[month]) return false;
+    return true;
+}
+
+void appointmentManagement(vector<Book> &books, const vector<User> &users, vector<RoomBooking> &roomBookings,
+                           User *currentUser) {
     while (true) {
         cout << "\n--- Appointment Management Sub-Menu ---" << endl;
         cout << "1. Reserve an Out-of-Stock Book" << endl;
@@ -14,11 +42,11 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
         cin >> choice;
 
         if (cin.fail() || choice < 1 || choice > 5) {
-            cin.clear();
-            cin.ignore(10000, '\n');
+            clearInputBuffer();
             cout << "[ERROR] Invalid choice! Try again." << endl;
             continue;
         }
+        clearInputBuffer();
 
         if (choice == 5) break;
 
@@ -27,7 +55,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             cout << "Enter Book ID to reserve: ";
             string bID;
             cin >> bID;
-            cin.ignore(10000, '\n');
+            clearInputBuffer();
 
             int bookIndex = -1;
             for (int i = 0; i < books.size(); i++) {
@@ -54,35 +82,43 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
 
             books[bookIndex].isReserved = true;
             cout << "[SUCCESS] Book reserved successfully!" << endl;
-        }
-        else if (choice == 2) {
+        } else if (choice == 2) {
             cout << "\n[Book a Study Room]" << endl;
             RoomBooking newBooking;
             newBooking.userID = currentUser->userID;
 
             cout << "Enter Room ID (e.g., R01, R02): ";
             cin >> newBooking.roomID;
-            cin.ignore(10000, '\n');
-
-            cout << "Enter Date (DD-MM-YYYY): ";
-            cin >> newBooking.date;
-            cin.ignore(10000, '\n');
+            clearInputBuffer();
 
             while (true) {
-                cout << "Select Time Slot (1: Morning, 2: Afternoon, 3: Evening): ";
-                cin >> newBooking.timeSlot;
-                if (cin.fail() || newBooking.timeSlot < 1 || newBooking.timeSlot > 3) {
-                    cin.clear();
-                    cin.ignore(10000, '\n');
-                    cout << "[ERROR] Invalid slot selection!" << endl;
+                cout << "Enter Date (DD-MM-YYYY): ";
+                cin >> newBooking.date;
+                clearInputBuffer();
+
+                if (!isValidDate(newBooking.date)) {
+                    cout << "[ERROR] Invalid date format or non-existent calendar date! Try again." << endl;
                 } else {
                     break;
                 }
             }
 
+            while (true) {
+                cout << "Select Time Slot (1: Morning, 2: Afternoon, 3: Evening): ";
+                cin >> newBooking.timeSlot;
+                if (cin.fail() || newBooking.timeSlot < 1 || newBooking.timeSlot > 3) {
+                    clearInputBuffer();
+                    cout << "[ERROR] Invalid slot selection!" << endl;
+                } else {
+                    clearInputBuffer();
+                    break;
+                }
+            }
+
             bool conflict = false;
-            for (const auto &rb : roomBookings) {
-                if (rb.roomID == newBooking.roomID && rb.date == newBooking.date && rb.timeSlot == newBooking.timeSlot) {
+            for (const auto &rb: roomBookings) {
+                if (rb.roomID == newBooking.roomID && rb.date == newBooking.date && rb.timeSlot == newBooking.
+                    timeSlot) {
                     conflict = true;
                     break;
                 }
@@ -95,20 +131,30 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
 
             roomBookings.push_back(newBooking);
             cout << "[SUCCESS] Study room booked successfully!" << endl;
-        }
-        else if (choice == 3) {
+        } else if (choice == 3) {
             cout << "\n[Cancel a Room Booking]" << endl;
             cout << "Enter User ID: ";
             string uID;
             cin >> uID;
+            clearInputBuffer();
 
             cout << "Enter Room ID: ";
             string rID;
             cin >> rID;
+            clearInputBuffer();
 
-            cout << "Enter Date (DD-MM-YYYY): ";
             string bDate;
-            cin >> bDate;
+            while (true) {
+                cout << "Enter Date (DD-MM-YYYY): ";
+                cin >> bDate;
+                clearInputBuffer();
+
+                if (!isValidDate(bDate)) {
+                    cout << "[ERROR] Invalid date format! Please enter as DD-MM-YYYY." << endl;
+                } else {
+                    break;
+                }
+            }
 
             int targetIndex = -1;
             for (int i = 0; i < roomBookings.size(); i++) {
@@ -125,18 +171,17 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
 
             roomBookings.erase(roomBookings.begin() + targetIndex);
             cout << "[SUCCESS] Room booking canceled successfully!" << endl;
-        }
-        else if (choice == 4) {
+        } else if (choice == 4) {
             cout << "\n[Active Room Bookings]" << endl;
             if (roomBookings.empty()) {
                 cout << "No active room bookings found." << endl;
                 continue;
             }
             cout << "--------------------------------------------------------" << endl;
-            for (const auto &rb : roomBookings) {
+            for (const auto &rb: roomBookings) {
                 string slotName = (rb.timeSlot == 1) ? "Morning" : (rb.timeSlot == 2) ? "Afternoon" : "Evening";
                 cout << "User: " << rb.userID << " | Room: " << rb.roomID
-                     << " | Date: " << rb.date << " | Slot: " << slotName << endl;
+                        << " | Date: " << rb.date << " | Slot: " << slotName << endl;
             }
             cout << "--------------------------------------------------------" << endl;
         }

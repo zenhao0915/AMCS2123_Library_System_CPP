@@ -2,7 +2,7 @@
 
 void saveBooks(const vector<Book> &books) {
     ofstream outFile("books.txt");
-    if (!outFile) return;
+    if (!outFile || books.empty()) return;
 
     for (const auto &b: books) {
         outFile << b.bookID << "|"
@@ -18,6 +18,14 @@ void saveBooks(const vector<Book> &books) {
 void loadBooks(vector<Book> &books) {
     ifstream inFile("books.txt");
     if (!inFile) return;
+    if (inFile.peek() == std::ifstream::traits_type::eof()) {
+        // Check File Is Empty Pre Init Books
+        if (ofstream outFile("books.txt"); outFile) {
+            outFile << "sixseven|SixSeven67|sohai|67|0|0\nkapibala|Bara Story|Yun|10|0|0\nnoparking|Tar Dick|TarShit|67|0|0\n";
+            outFile.flush();
+            outFile.close();
+        }
+    }
 
     books.clear();
     string line;
@@ -70,6 +78,16 @@ void saveUsers(vector<User> &users, const User *currentUser) {
 void loadUsers(vector<User> &users) {
     ifstream inFile("users.txt");
     if (!inFile) return;
+
+    if (inFile.peek() == std::ifstream::traits_type::eof()) {
+        // Check File Is Empty Pre Init Admin
+        if (ofstream outFile("users.txt"); outFile) {
+            outFile << "admin|admin|10289358105851308976|1|0|0|\n";
+            // UserID, UserName, Password, isAdmin, BorrowedBooks, isBlackListed, BorrowedStr
+            outFile.flush();
+            outFile.close();
+        }
+    }
 
     users.clear();
     string line;

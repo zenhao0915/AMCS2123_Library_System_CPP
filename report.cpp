@@ -68,9 +68,10 @@ void reportingStatistics(vector<Book> &books, vector<User> &users, vector<RoomBo
 
             for (const auto &tx: transactions) {
                 if (tx.isSettled) {
-                    totalCollected += tx.paidAmount;
+                    totalCollected += tx.fineAmount;
                     settledCount++;
                 } else {
+                    totalCollected += tx.paidAmount;
                     totalOutstanding += (tx.fineAmount - tx.paidAmount);
                     unsettledCount++;
                 }

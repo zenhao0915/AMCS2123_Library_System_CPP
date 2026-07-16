@@ -157,6 +157,9 @@ void billingPayment(vector<User> &users, vector<Transaction> &transactions) {
                     cout << left << setw(25) << "Overdue Library Fine" << "RM " << fixed << setprecision(2) << tx.fineAmount << endl;
                     cout << "----------------------------------------" << endl;
                     cout << left << setw(25) << "Total Paid:" << "RM " << fixed << setprecision(2) << tx.paidAmount << endl;
+                    if (tx.paidAmount > tx.fineAmount) {
+                        cout << left << setw(25) << "Change To Return: RM " << fixed << setprecision(2) << (tx.paidAmount - tx.fineAmount) << endl;
+                    }
                     cout << left << setw(25) << "Status:" << (tx.isSettled ? "FULLY SETTLED" : "PARTIAL/UNPAID") << endl;
                     cout << "========================================" << endl;
                     break;

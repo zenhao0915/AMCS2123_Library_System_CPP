@@ -89,6 +89,11 @@ void saveUsers(vector<User> &users, const User *currentUser);
 
 void loadUsers(vector<User> &users);
 
+inline void clearInputBuffer() {
+    cin.clear();
+    cin.ignore(10000, '\n');
+}
+
 class Session {
     User *currentUser = nullptr;
 

@@ -138,6 +138,7 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             }
 
             newBook.isReserved = false;
+            newBook.borrowCount = 0;
             books.push_back(newBook);
             cout << "[SUCCESS] Book added to inventory!" << endl;
         }
