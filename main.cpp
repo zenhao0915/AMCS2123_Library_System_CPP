@@ -119,16 +119,16 @@ int main() {
                 appointmentManagement(books, users, roomBookings, currentUser);
                 break;
             case 4:
-                billingPayment(users, transactions);
+                billingPayment(users, transactions, currentUser);
                 break;
             case 5:
-                reportingStatistics(books, users, roomBookings, transactions);
+                reportingStatistics(books, users, roomBookings, transactions, currentUser);
                 break;
             case 6:
                 extraHotBooks(books);
                 break;
             case 7:
-                extraBlacklist(users, transactions);
+                extraBlacklist(users, transactions, currentUser);
                 break;
             case 8: {
                 session.logoutUser();

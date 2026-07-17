@@ -1,7 +1,8 @@
 #include "data.h"
 
 
-void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions) {
+void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions, User *currentUser) {
+    if (currentUser->isBlacklisted) return;
     while (true) {
         cout << "\n--- Blacklist System Sub-Menu ---" << endl;
         cout << "1. Manually Blacklist a Member" << endl;

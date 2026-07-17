@@ -133,10 +133,6 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             cout << "[SUCCESS] Study room booked successfully!" << endl;
         } else if (choice == 3) {
             cout << "\n[Cancel a Room Booking]" << endl;
-            cout << "Enter User ID: ";
-            string uID;
-            cin >> uID;
-            clearInputBuffer();
 
             cout << "Enter Room ID: ";
             string rID;
@@ -158,7 +154,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
 
             int targetIndex = -1;
             for (int i = 0; i < roomBookings.size(); i++) {
-                if (roomBookings[i].userID == uID && roomBookings[i].roomID == rID && roomBookings[i].date == bDate) {
+                if (roomBookings[i].userID == currentUser->userID && roomBookings[i].roomID == rID && roomBookings[i].date == bDate) {
                     targetIndex = i;
                     break;
                 }

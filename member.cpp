@@ -44,10 +44,7 @@ void memberManagement(vector<User> &users, User *user) {
             }
             case 2: {
                 cout << "\n[Update Member Profile]" << endl;
-                cout << "Enter User ID to update: ";
-                string searchID;
-                cin >> searchID;
-                cin.ignore(10000, '\n');
+
                 string newName;
                 while (true) {
                     cout << "Enter New Name (Current: " << user->userName << "): ";

@@ -1,6 +1,6 @@
 #include "data.h"
 
-void billingPayment(vector<User> &users, vector<Transaction> &transactions) {
+void billingPayment(vector<User> &users, vector<Transaction> &transactions, User *currentUser) {
     while (true) {
         cout << "\n--- Billing & Payment Processing Sub-Menu ---" << endl;
         cout << "1. Generate Overdue Fine" << endl;
@@ -23,6 +23,8 @@ void billingPayment(vector<User> &users, vector<Transaction> &transactions) {
         if (choice == 5) break;
 
         if (choice == 1) {
+            if (!currentUser->hasPermission()) continue;
+
             cout << "\n[Generate Overdue Fine]" << endl;
             cout << "Enter User ID: ";
             string uID;

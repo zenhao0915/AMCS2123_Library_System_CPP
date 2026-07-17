@@ -72,14 +72,14 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
 
 void appointmentManagement(vector<Book> &books, const vector<User> &users, vector<RoomBooking> &roomBookings, User *currentUser);
 
-void billingPayment(vector<User> &users, vector<Transaction> &transactions);
+void billingPayment(vector<User> &users, vector<Transaction> &transactions, User *currentUser);
 
 void reportingStatistics(vector<Book> &books, vector<User> &users, vector<RoomBooking> &roomBookings,
-                         vector<Transaction> &transactions);
+                         vector<Transaction> &transactions, User *currentUser);
 
 void extraHotBooks(vector<Book> &books);
 
-void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions);
+void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions, User *currentUser);
 
 void saveBooks(const vector<Book> &books);
 

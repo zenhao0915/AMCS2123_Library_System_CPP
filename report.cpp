@@ -1,7 +1,8 @@
 #include "data.h"
 
 void reportingStatistics(vector<Book> &books, vector<User> &users, vector<RoomBooking> &roomBookings,
-                         vector<Transaction> &transactions) {
+                         vector<Transaction> &transactions, User *currentUser) {
+    if (!currentUser->hasPermission()) return;
     while (true) {
         cout << "\n--- Reporting and Statistics Sub-Menu ---" << endl;
         cout << "1. Books Inventory Report" << endl;
