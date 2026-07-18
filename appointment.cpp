@@ -97,7 +97,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
                 clearInputBuffer();
 
                 if (!isValidDate(newBooking.date)) {
-                    cout << "[ERROR] Invalid date format or non-existent calendar date! Try again." << endl;
+                    cout << "[ERROR] Invalid date format (DD-MM-YYYY) or non-existent calendar date! Try again." << endl;
                 } else {
                     break;
                 }

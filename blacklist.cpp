@@ -2,7 +2,7 @@
 
 
 void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions, User *currentUser) {
-    if (currentUser->isBlacklisted) return;
+    if (currentUser->hasPermission()) return;
     while (true) {
         cout << "\n--- Blacklist System Sub-Menu ---" << endl;
         cout << "1. Manually Blacklist a Member" << endl;

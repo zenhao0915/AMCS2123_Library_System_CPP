@@ -16,16 +16,23 @@ void saveBooks(const vector<Book> &books) {
 }
 
 void loadBooks(vector<Book> &books) {
-    ifstream inFile("books.txt");
-    if (!inFile) return;
-    if (inFile.peek() == std::ifstream::traits_type::eof()) {
-        // Check File Is Empty Pre Init Books
-        if (ofstream outFile("books.txt"); outFile) {
-            outFile << "sixseven|SixSeven67|sohai|67|0|0\nkapibala|Bara Story|Yun|10|0|0\nnoparking|Tar Dick|TarShit|67|0|0\n";
-            outFile.flush();
+    bool isEmpty = false;
+    {
+        if (ifstream checkFile("books.txt"); !checkFile || checkFile.peek() == ifstream::traits_type::eof()) {
+            isEmpty = true;
+        }
+    }
+    if (isEmpty) {
+        ofstream outFile("books.txt");
+        if (outFile) {
+            outFile << "sixseven|SixSeven67|sohai|67|0|0\n"
+                    << "kapibala|Bara Story|Yun|10|0|0\n"
+                    << "noparking|Tar Dick|TarShit|67|0|0\n";
             outFile.close();
         }
     }
+    ifstream inFile("books.txt");
+    if (!inFile) return;
 
     books.clear();
     string line;
@@ -76,18 +83,23 @@ void saveUsers(vector<User> &users, const User *currentUser) {
 }
 
 void loadUsers(vector<User> &users) {
-    ifstream inFile("users.txt");
-    if (!inFile) return;
+    bool isEmpty = false;
+    {
+        if (ifstream checkFile("users.txt"); !checkFile || checkFile.peek() == ifstream::traits_type::eof()) {
+            isEmpty = true;
+        }
+    }
 
-    if (inFile.peek() == std::ifstream::traits_type::eof()) {
-        // Check File Is Empty Pre Init Admin
-        if (ofstream outFile("users.txt"); outFile) {
+    if (isEmpty) {
+        ofstream outFile("users.txt");
+        if (outFile) {
             outFile << "admin|admin|10289358105851308976|1|0|0|\n";
-            // UserID, UserName, Password, isAdmin, BorrowedBooks, isBlackListed, BorrowedStr
-            outFile.flush();
             outFile.close();
         }
     }
+
+    ifstream inFile("users.txt");
+    if (!inFile) return;
 
     users.clear();
     string line;
@@ -97,7 +109,6 @@ void loadUsers(vector<User> &users) {
         stringstream ss(line);
         User u;
         string adminStr, borrowStr, blacklistStr, borrowedBooksStr, hashStr;
-        hash<string> pwd;
 
         getline(ss, u.userID, '|');
         getline(ss, u.userName, '|');
@@ -112,6 +123,7 @@ void loadUsers(vector<User> &users) {
         u.isAdmin = (adminStr == "1");
         u.borrowedCount = stoi(borrowStr);
         u.isBlacklisted = (blacklistStr == "1");
+
         while (getline(ss, borrowedBooksStr, ',')) {
             u.booksBorrowed.push_back(borrowedBooksStr);
         }

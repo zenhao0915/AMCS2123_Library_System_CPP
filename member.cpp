@@ -47,6 +47,7 @@ void memberManagement(vector<User> &users, User *user) {
 
                 string newName;
                 while (true) {
+                    clearInputBuffer();
                     cout << "Enter New Name (Current: " << user->userName << "): ";
                     getline(cin, newName);
                     if (!Session::isValidName(newName)) {
