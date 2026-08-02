@@ -1,6 +1,9 @@
 #include "data.h"
 
 void extraHotBooks(vector<Book> &books) {
+    clearInputBuffer();
+    int selection;
+
     cout << "\n========================================" << endl;
     cout << "     TOP 5 HOT TOPICS BOOK REPORT       " << endl;
     cout << "========================================" << endl;

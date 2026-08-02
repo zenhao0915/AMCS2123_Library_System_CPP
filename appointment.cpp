@@ -1,6 +1,6 @@
 #include "data.h"
 
-bool isValidDate(const string &dateStr) {
+static bool isValidDate(const string &dateStr) {
     if (dateStr.length() != 10) return false;
 
     if (dateStr[2] != '-' || dateStr[5] != '-') return false;
@@ -19,7 +19,7 @@ bool isValidDate(const string &dateStr) {
 
     int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
         daysInMonth[2] = 29;
     }
 
@@ -117,8 +117,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
 
             bool conflict = false;
             for (const auto &rb: roomBookings) {
-                if (rb.roomID == newBooking.roomID && rb.date == newBooking.date && rb.timeSlot == newBooking.
-                    timeSlot) {
+                if (rb.roomID == newBooking.roomID && rb.date == newBooking.date && rb.timeSlot == newBooking.timeSlot) {
                     conflict = true;
                     break;
                 }
@@ -130,6 +129,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             }
 
             roomBookings.push_back(newBooking);
+            saveAppointments(roomBookings);
             cout << "[SUCCESS] Study room booked successfully!" << endl;
         } else if (choice == 3) {
             cout << "\n[Cancel a Room Booking]" << endl;

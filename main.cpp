@@ -43,13 +43,13 @@ int main() {
 
     loadUsers(users);
     loadBooks(books);
+    loadAppointments(roomBookings);
 
     while (true) {
         printMenu(session);
         cin >> currentSelection;
         if (cin.fail()) {
-            cin.clear();
-            cin.ignore(10000, '\n');
+            clearInputBuffer();
             cout << "\nInvalid input! Please enter a valid number." << endl;
             continue;
         }
@@ -76,13 +76,11 @@ int main() {
                     string userID;
                     string userName;
                     string userPassword;
-                    cin.ignore(10000, '\n');
-                    cout << "[REGISTER] Enter UserID: ";
-                    getline(cin, userID);
-                    cout << "[REGISTER] Enter UserName: ";
-                    getline(cin, userName);
-                    cout << "[REGISTER] Enter Password: ";
-                    getline(cin, userPassword);
+                    clearInputBuffer();
+                    cout << "\n💡 (Tip: Press ESC or type 'esc' anytime to cancel this registration)" << endl;
+                    if (!getSecureInput(userID, "[REGISTER] Enter UserID: ")) continue;
+                    if (!getSecureInput(userName, "[REGISTER] Enter UserName: ")) continue;
+                    if (!getSecureInput(userPassword, "[REGISTER] Enter Password: ")) continue;
                     session.registerUser(users, userID, userName, userPassword);
                     break;
                 }
@@ -90,15 +88,15 @@ int main() {
                     // Login
                     string userID;
                     string userPassword;
-                    cin.ignore(10000, '\n');
-                    cout << "[LOGIN] Enter UserID: ";
-                    getline(cin, userID);
+                    clearInputBuffer();
+                    cout << "\n💡 (Tip: Press ESC or type 'esc' anytime to cancel this login)" << endl;
+
+                    if (!getSecureInput(userID, "[LOGIN] Enter UserID: ")) continue;
                     if (!Session::isUserExists(users, userID)) {
                         cout << "[ERROR] User " << userID << " does not exist." << endl;
                         break;
                     }
-                    cout << "[LOGIN] Enter Password: ";
-                    getline(cin, userPassword);
+                    if (!getSecureInput(userPassword, "[LOGIN] Enter Password: ")) continue;
                     session.loginToUser(users, userID, userPassword);
                     break;
                 }
@@ -137,6 +135,10 @@ int main() {
             default: break;
         }
     }
+
+    saveUsers(users, session.getCurrentUser());
+    saveBooks(books);
+    saveAppointments(roomBookings);
     cout << "\nThank you for using Library Management System. Program End!" << endl;
     return 0;
 }

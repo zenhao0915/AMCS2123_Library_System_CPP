@@ -59,6 +59,43 @@ void loadBooks(vector<Book> &books) {
     inFile.close();
 }
 
+void saveAppointments(const vector<RoomBooking> &roomBooking) {
+    ofstream outFile("appointment.txt");
+    if (!outFile || roomBooking.empty()) return;
+
+    for (const auto &r: roomBooking) {
+        outFile << r.roomID << "|"
+                << r.userID << "|"
+                << r.date << "|"
+                << r.timeSlot << "\n";
+    }
+    outFile.close();
+}
+
+void loadAppointments(vector<RoomBooking> &booking) {
+    ifstream inFile("appointment.txt");
+    if (!inFile) return;
+
+    booking.clear();
+    string line;
+    while (getline(inFile, line)) {
+        if (line.empty()) continue;
+
+        stringstream ss(line);
+        RoomBooking b;
+        string timeSlot;
+
+        getline(ss, b.roomID, '|');
+        getline(ss, b.userID, '|');
+        getline(ss, b.date, '|');
+        getline(ss, timeSlot, '|');
+
+        b.timeSlot = stoi(timeSlot);
+        booking.push_back(b);
+    }
+    inFile.close();
+}
+
 void saveUsers(vector<User> &users, const User *currentUser) {
     ofstream outFile("users.txt");
     if (!outFile) return;

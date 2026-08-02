@@ -24,7 +24,7 @@ void memberManagement(vector<User> &users, User *user) {
                 cout << "Enter User ID to search: ";
                 string searchID;
                 cin >> searchID;
-                cin.ignore(10000, '\n');
+                clearInputBuffer();
                 bool found = false;
                 for (const auto &u: users) {
                     if (u.userID == searchID) {

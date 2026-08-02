@@ -89,9 +89,24 @@ void saveUsers(vector<User> &users, const User *currentUser);
 
 void loadUsers(vector<User> &users);
 
+void saveAppointments(const vector<RoomBooking> &roomBooking);
+
+void loadAppointments(vector<RoomBooking> &roomBookings);
+
 inline void clearInputBuffer() {
     cin.clear();
     cin.ignore(10000, '\n');
+}
+
+inline bool getSecureInput(string &output, const string &prompt) {
+    cout << prompt;
+    getline(cin, output);
+
+    if (output == "esc" || output == "ESC" || (!output.empty() && output[0] == 27)) {
+        cout << "\n[ACTION CANCELED] Operation aborted by user. Returning to menu...\n" << endl;
+        return false;
+    }
+    return true;
 }
 
 class Session {
