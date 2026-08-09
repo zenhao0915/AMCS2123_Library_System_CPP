@@ -127,10 +127,11 @@ void loadUsers(vector<User> &users) {
         }
     }
 
+    constexpr hash<string> hasher;
     if (isEmpty) {
         ofstream outFile("users.txt");
         if (outFile) {
-            outFile << "admin|admin|10289358105851308976|1|0|0|\n";
+            outFile << "admin|admin|" << hasher("admin") << "|1|0|0|\n";
             outFile.close();
         }
     }
