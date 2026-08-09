@@ -77,7 +77,7 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
                 continue;
             }
 
-            if (currentUser->borrowedCount <= 0) {
+            if (currentUser->borrowedCount <= 0) { // TODO: Process File Save&Load Data And Check Borrowed Books In List
                 cout << "[ERROR] This user has no borrowed books recorded!" << endl;
                 continue;
             }
@@ -85,7 +85,7 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             books[bookIndex].stock++;
             currentUser->borrowedCount--;
             cout << "[SUCCESS] Book returned successfully!" << endl;
-        } else if (choice == 3) {
+        } else if (choice == 3) { // Display Borrowed Books
             cout << endl << "[Books] Books Borrowed By User: " << endl;
             if (currentUser->booksBorrowed.empty()) {
                 cout << "[ERROR] No books borrowed!" << endl;
@@ -96,7 +96,7 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
                 cout << count << ". " << bookName << endl;
                 count++;
             }
-        } else if (choice == 4) {
+        } else if (choice == 4) { // Add New Book to Inventory
             if (!currentUser->hasPermission()) continue;
 
             cout << "\n[Add New Book]" << endl;
@@ -142,7 +142,7 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             books.push_back(newBook);
             cout << "[SUCCESS] Book added to inventory!" << endl;
         }
-        else if (choice == 5) {
+        else if (choice == 5) { // View All Books
             cout << "\n[View All Books]" << endl;
             if (books.empty()) {
                 cout << "No books in inventory." << endl;
