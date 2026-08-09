@@ -2,11 +2,11 @@
 
 string modules[] = {
     "Member Management",
-    "Booking/Books View",
-    "Appointment Management",
+    "Booking/Books View", // TODO: ()
+    "Appointment Management", // TODO: ()
     "Billing",
     "Reporting and Statistics",
-    "(Extra) Top 5 Hot Topics Book",
+    "(Extra) Top 5 Hot Topics Book", // TODO: Filter By Name/ID
     "(Extra) Blacklist System",
     "Logout",
     "Exit"
@@ -77,7 +77,7 @@ int main() {
                     string userName;
                     string userPassword;
                     clearInputBuffer();
-                    cout << "\n💡 (Tip: Press ESC or type 'esc' anytime to cancel this registration)" << endl;
+                    cout << "\n(Tip: Press ESC or type 'esc' anytime to cancel this registration)" << endl;
                     if (!getSecureInput(userID, "[REGISTER] Enter UserID: ")) continue;
                     if (!getSecureInput(userName, "[REGISTER] Enter UserName: ")) continue;
                     if (!getSecureInput(userPassword, "[REGISTER] Enter Password: ")) continue;
@@ -89,7 +89,7 @@ int main() {
                     string userID;
                     string userPassword;
                     clearInputBuffer();
-                    cout << "\n💡 (Tip: Press ESC or type 'esc' anytime to cancel this login)" << endl;
+                    cout << "\n(Tip: Press ESC or type 'esc' anytime to cancel this login)" << endl;
 
                     if (!getSecureInput(userID, "[LOGIN] Enter UserID: ")) continue;
                     if (!Session::isUserExists(users, userID)) {
