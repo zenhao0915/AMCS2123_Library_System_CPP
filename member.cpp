@@ -44,20 +44,40 @@ void memberManagement(vector<User> &users, User *user) {
             }
             case 2: {
                 cout << "\n[Update Member Profile]" << endl;
+                string newName, idToSearch;
+                bool found = true;
+                User *tempUser = nullptr;
 
-                string newName;
                 while (true) {
                     clearInputBuffer();
-                    cout << "Enter New Name (Current: " << user->userName << "): ";
+                    if (user->isAdmin) {
+                        cout << "Search Member ID: ";
+                        getline(cin, idToSearch);
+                        if (Session::getUserByID(users, idToSearch) == nullptr) {
+                            cout << "Member ID (" << idToSearch << ") not found!" << endl;
+                            found = false;
+                            break;
+                        }
+                        tempUser = Session::getUserByID(users, idToSearch);
+                        cout << "Enter New Name (Current: " << tempUser->userName <<
+                                "): ";
+                    } else {
+                        cout << "Enter New Name (Current: " << user->userName << "): ";
+                    }
                     getline(cin, newName);
                     if (!Session::isValidName(newName)) {
                         cout << "[ERROR] Invalid name! Name cannot contain digits." << endl;
                     } else {
-                        user->userName = newName;
+                        if (tempUser != nullptr) {
+                            tempUser->userName = newName;
+                        } else {
+                            user->userName = newName;
+                        }
                         saveUsers(users, user);
                         break;
                     }
                 }
+                if (!found) break;
                 cout << "[SUCCESS] Profile updated successfully!" << endl;
                 break;
             }

@@ -146,7 +146,7 @@ public:
         return exists;
     }
 
-    static const User *getUserByID(const vector<User> &users, const string &userID) {
+    static User *getUserByID(vector<User> &users, const string &userID) {
         for (auto &user: users) {
             if (user.userID == userID) {
                 return &user;
