@@ -2,7 +2,6 @@
 
 void extraHotBooks(vector<Book> &books) {
     clearInputBuffer();
-    int selection;
 
     cout << "\n========================================" << endl;
     cout << "     TOP 5 HOT TOPICS BOOK REPORT       " << endl;
@@ -26,7 +25,7 @@ void extraHotBooks(vector<Book> &books) {
         }
     }
 
-    size_t displayCount = sortedBooks.size() < 5 ? sortedBooks.size() : 5;
+    const size_t displayCount = sortedBooks.size() < 5 ? sortedBooks.size() : 5;
 
     cout << left << setw(6) << "Rank" << setw(10) << "Book ID" << setw(20) << "Title" << "Borrows" << endl;
     cout << "----------------------------------------" << endl;
