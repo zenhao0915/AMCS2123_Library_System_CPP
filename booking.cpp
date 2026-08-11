@@ -28,7 +28,7 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             cout << "\n[Borrow a Book]" << endl;
             if (currentUser->isBlacklisted) {
                 cout << "[BLACKLIST] Already blacklisted!" << endl;
-                break;
+                continue;
             }
 
             cout << "Enter Book ID: ";
@@ -54,12 +54,23 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             }
 
             books[bookIndex].stock--;
-            currentUser->borrowBook(books[bookIndex]);
-            saveUsers(users, currentUser);
-            cout << "[SUCCESS] Book borrowed successfully!" << endl;
+            if (currentUser->borrowBook(books[bookIndex])) {
+                books[bookIndex].borrowCount++;
+                saveUsers(users, currentUser);
+                saveBooks(books);
+                cout << "[SUCCESS] Book borrowed successfully!" << endl;
+            } else {
+                books[bookIndex].stock++;
+                cout << "[ERROR] Book borrowed failed! Maximum Amount 5 Books Exceeded!" << endl;
+            }
         }
         else if (choice == 2) {
             cout << "\n[Return a Book]" << endl;
+            if (currentUser->booksBorrowed.empty()) {
+                cout << "[ERROR] This user has no borrowed books recorded!" << endl;
+                continue;
+            }
+
             cout << "Enter Book ID: ";
             string bID;
             cin >> bID;
@@ -73,19 +84,28 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             }
 
             if (bookIndex == -1) {
-                cout << "[ERROR] Book ID not found!" << endl;
+                cout << "[ERROR] Book ID not found in library inventory!" << endl;
                 continue;
             }
 
-            if (currentUser->borrowedCount <= 0) { // TODO: Process File Save&Load Data And Check Borrowed Books In List
-                cout << "[ERROR] This user has no borrowed books recorded!" << endl;
+            auto it = ranges::find(currentUser->booksBorrowed, books[bookIndex].bookID);
+            if (it == currentUser->booksBorrowed.end()) {
+                it = ranges::find(currentUser->booksBorrowed, books[bookIndex].name);
+            }
+
+            if (it == currentUser->booksBorrowed.end()) {
+                cout << "[ERROR] You have not borrowed this book!" << endl;
                 continue;
             }
 
+            currentUser->booksBorrowed.erase(it);
             books[bookIndex].stock++;
-            currentUser->borrowedCount--;
+            currentUser->borrowedCount = currentUser->booksBorrowed.size();
+
+            saveUsers(users, currentUser);
+            saveBooks(books);
             cout << "[SUCCESS] Book returned successfully!" << endl;
-        } else if (choice == 3) { // Display Borrowed Books
+        } else if (choice == 3) {
             cout << endl << "[Books] Books Borrowed By User: " << endl;
             if (currentUser->booksBorrowed.empty()) {
                 cout << "[ERROR] No books borrowed!" << endl;
@@ -96,7 +116,7 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
                 cout << count << ". " << bookName << endl;
                 count++;
             }
-        } else if (choice == 4) { // Add New Book to Inventory
+        } else if (choice == 4) {
             if (!currentUser->hasPermission()) continue;
 
             cout << "\n[Add New Book]" << endl;
@@ -140,9 +160,10 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             newBook.isReserved = false;
             newBook.borrowCount = 0;
             books.push_back(newBook);
+            saveBooks(books);
             cout << "[SUCCESS] Book added to inventory!" << endl;
         }
-        else if (choice == 5) { // View All Books
+        else if (choice == 5) {
             cout << "\n[View All Books]" << endl;
             if (books.empty()) {
                 cout << "No books in inventory." << endl;

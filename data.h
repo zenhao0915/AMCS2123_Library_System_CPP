@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include<iomanip>
+#include <iomanip>
 #include <utility>
 #include <vector>
 #include <string>
@@ -10,6 +10,7 @@
 #include <vector>
 #include <functional>
 #include <cassert>
+#include <algorithm>
 
 using namespace std;
 
@@ -37,9 +38,13 @@ struct User {
         : userID(std::move(id)), userName(std::move(name)), passwordHash(pwdHash) {
     }
 
-    void borrowBook(const Book &book) {
-        booksBorrowed.push_back(book.name);
-        borrowedCount++;
+    bool borrowBook(const Book &book) {
+        if (borrowedCount < 5) {
+            booksBorrowed.push_back(book.name);
+            borrowedCount++;
+            return true;
+        }
+        return false;
     }
 
     bool hasPermission() const {

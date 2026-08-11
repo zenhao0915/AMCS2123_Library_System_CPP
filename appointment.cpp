@@ -166,6 +166,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             }
 
             roomBookings.erase(roomBookings.begin() + targetIndex);
+            saveAppointments(roomBookings);
             cout << "[SUCCESS] Room booking canceled successfully!" << endl;
         } else if (choice == 4) {
             cout << "\n[Active Room Bookings]" << endl;

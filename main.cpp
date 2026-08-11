@@ -3,7 +3,7 @@
 string modules[] = {
     "Member Management",
     "Booking/Books View", // TODO: ()
-    "Appointment Management", // TODO: ()
+    "Appointment Management", // TODO: (Fuck JOIS)
     "Billing",
     "Reporting and Statistics",
     "(Extra) Top 5 Hot Topics Book", // TODO: Filter By Name/ID
