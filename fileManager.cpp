@@ -170,3 +170,45 @@ void loadUsers(vector<User> &users) {
     }
     inFile.close();
 }
+
+void saveTransactions(const vector<Transaction> &transactions) {
+    ofstream outFile("transactions.txt");
+    if (!outFile) return;
+
+    for (const auto &tx: transactions) {
+        outFile << tx.txID << "|"
+                << tx.userID << "|"
+                << tx.fineAmount << "|"
+                << tx.paidAmount << "|"
+                << tx.isSettled << "\n";
+    }
+    outFile.close();
+}
+
+void loadTransactions(vector<Transaction> &transactions) {
+    ifstream inFile("transactions.txt");
+    if (!inFile) return;
+
+    transactions.clear();
+    string line;
+    while (getline(inFile, line)) {
+        if (line.empty()) continue;
+
+        stringstream ss(line);
+        Transaction tx;
+        string fineStr, paidStr, settledStr;
+
+        getline(ss, tx.txID, '|');
+        getline(ss, tx.userID, '|');
+        getline(ss, fineStr, '|');
+        getline(ss, paidStr, '|');
+        getline(ss, settledStr, '|');
+
+        tx.fineAmount = stod(fineStr);
+        tx.paidAmount = stod(paidStr);
+        tx.isSettled = (settledStr == "1");
+
+        transactions.push_back(tx);
+    }
+    inFile.close();
+}
