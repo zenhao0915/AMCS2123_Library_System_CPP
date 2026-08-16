@@ -1,7 +1,6 @@
 #include "data.h"
 
-
-void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions, User *currentUser) {
+void extraBlacklist(vector<User> &users, User *currentUser) {
     if (!currentUser->hasPermission()) return;
     while (true) {
         cout << "\n--- Blacklist System Sub-Menu ---" << endl;
@@ -14,7 +13,7 @@ void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions
         int choice;
         cin >> choice;
 
-        if (cin.fail() || choice < 1 || choice > 5) {
+        if (cin.fail() || choice < 1 || choice > 4) {
             cin.clear();
             cin.ignore(10000, '\n');
             cout << "[ERROR] Invalid choice! Try again." << endl;

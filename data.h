@@ -84,7 +84,7 @@ void reportingStatistics(vector<Book> &books, vector<User> &users, vector<RoomBo
 
 void extraHotBooks(vector<Book> &books);
 
-void extraBlacklist(vector<User> &users, const vector<Transaction> &transactions, User *currentUser);
+void extraBlacklist(vector<User> &users, User *currentUser);
 
 void saveBooks(const vector<Book> &books);
 
@@ -97,6 +97,10 @@ void loadUsers(vector<User> &users);
 void saveAppointments(const vector<RoomBooking> &roomBooking);
 
 void loadAppointments(vector<RoomBooking> &roomBookings);
+
+void saveTransactions(const vector<Transaction> &transactions);
+
+void loadTransactions(vector<Transaction> &transactions);
 
 inline void clearInputBuffer() {
     cin.clear();
@@ -177,9 +181,9 @@ public:
             return;
         }
         users.push_back(newUser);
-        currentUser = &users[users.size() - 1];
+        currentUser = &users.back();
         saveUsers(users, nullptr);
-        loadUsers(users);
+        //loadUsers(users);
         cout << "[SUCCESSFUL] User Registration Is Successful!" << endl;
     }
 

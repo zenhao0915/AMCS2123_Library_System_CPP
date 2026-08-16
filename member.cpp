@@ -48,8 +48,8 @@ void memberManagement(vector<User> &users, User *user) {
                 bool found = true;
                 User *tempUser = nullptr;
 
+                clearInputBuffer();
                 while (true) {
-                    clearInputBuffer();
                     if (user->isAdmin) {
                         cout << "Search Member ID: ";
                         getline(cin, idToSearch);

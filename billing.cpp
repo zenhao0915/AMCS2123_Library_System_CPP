@@ -63,6 +63,7 @@ void billingPayment(vector<User> &users, vector<Transaction> &transactions, User
             tx.isSettled = false;
 
             transactions.push_back(tx);
+            saveTransactions(transactions);
             cout << "[SUCCESS] Fine generated! Invoice ID: " << tx.txID << " | Amount: RM " << fixed << setprecision(2) << tx.fineAmount << endl;
         }
         else if (choice == 2) {
@@ -111,6 +112,7 @@ void billingPayment(vector<User> &users, vector<Transaction> &transactions, User
 
             transactions[txIndex].paidAmount += payment;
             transactions[txIndex].isSettled = true;
+            saveTransactions(transactions);
             double change = payment - outstanding;
 
             cout << "[SUCCESS] Payment processed successfully!" << endl;

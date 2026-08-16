@@ -2,8 +2,8 @@
 
 string modules[] = {
     "Member Management",
-    "Booking/Books View", // TODO: ()
-    "Appointment Management", // TODO: (Fuck JOIS)
+    "Booking/Books View",
+    "Appointment Management",
     "Billing",
     "Reporting and Statistics",
     "(Extra) Top 5 Hot Topics Book", // TODO: Filter By Name/ID
@@ -12,7 +12,7 @@ string modules[] = {
     "Exit"
 };
 
-void printMenu(const Session& session) {
+void printMenu(const Session &session) {
     cout << "\n\tMenu" << endl;
     for (int i = 0; i < 22; i++) cout << "=";
     cout << endl;
@@ -44,6 +44,7 @@ int main() {
     loadUsers(users);
     loadBooks(books);
     loadAppointments(roomBookings);
+    loadTransactions(transactions);
 
     while (true) {
         printMenu(session);
@@ -126,7 +127,7 @@ int main() {
                 extraHotBooks(books);
                 break;
             case 7:
-                extraBlacklist(users, transactions, currentUser);
+                extraBlacklist(users, currentUser);
                 break;
             case 8: {
                 session.logoutUser();
@@ -139,6 +140,7 @@ int main() {
     saveUsers(users, session.getCurrentUser());
     saveBooks(books);
     saveAppointments(roomBookings);
+    saveTransactions(transactions);
     cout << "\nThank you for using Library Management System. Program End!" << endl;
     return 0;
 }
