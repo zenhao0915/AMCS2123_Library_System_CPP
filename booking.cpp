@@ -48,6 +48,19 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
                 continue;
             }
 
+            bool alreadyBorrowed = false;
+            for (const auto &borrowedItem : currentUser->booksBorrowed) {
+                if (borrowedItem == books[bookIndex].bookID || borrowedItem == books[bookIndex].name) {
+                    alreadyBorrowed = true;
+                    break;
+                }
+            }
+
+            if (alreadyBorrowed) {
+                cout << "[ERROR] You have already borrowed a copy of this book! Cannot borrow duplicates." << endl;
+                continue;
+            }
+
             if (books[bookIndex].stock <= 0) {
                 cout << "[ERROR] Book is out of stock!" << endl;
                 continue;
