@@ -78,7 +78,7 @@ int main() {
                     string userName;
                     string userPassword;
                     clearInputBuffer();
-                    cout << "\n(Tip: Press ESC or type 'esc' anytime to cancel this registration)" << endl;
+                    cout << "\n(Tip: Type 'esc' anytime to cancel this registration)" << endl;
                     if (!getSecureInput(userID, "[REGISTER] Enter UserID: ")) continue;
                     if (!getSecureInput(userName, "[REGISTER] Enter UserName: ")) continue;
                     if (!getSecureInput(userPassword, "[REGISTER] Enter Password: ")) continue;
@@ -90,7 +90,7 @@ int main() {
                     string userID;
                     string userPassword;
                     clearInputBuffer();
-                    cout << "\n(Tip: Press ESC or type 'esc' anytime to cancel this login)" << endl;
+                    cout << "\n(Tip: Type 'esc' anytime to cancel this login)" << endl;
 
                     if (!getSecureInput(userID, "[LOGIN] Enter UserID: ")) continue;
                     if (!Session::isUserExists(users, userID)) {
