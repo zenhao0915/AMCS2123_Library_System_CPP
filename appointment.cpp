@@ -131,6 +131,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             roomBookings.push_back(newBooking);
             saveAppointments(roomBookings);
             cout << "[SUCCESS] Study room booked successfully!" << endl;
+
         } else if (choice == 3) {
             cout << "\n[Cancel a Room Booking]" << endl;
 
@@ -152,22 +153,41 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
                 }
             }
 
+            // Enhanced: Prompt and validate the time slot to cancel
+            int cancelSlot;
+            while (true) {
+                cout << "Select Time Slot to Cancel (1: Morning, 2: Afternoon, 3: Evening): ";
+                cin >> cancelSlot;
+                if (cin.fail() || cancelSlot < 1 || cancelSlot > 3) {
+                    clearInputBuffer();
+                    cout << "[ERROR] Invalid slot selection! Please enter 1, 2, or 3." << endl;
+                } else {
+                    clearInputBuffer();
+                    break;
+                }
+            }
+
+            // Enhanced: Search for match including timeSlot
             int targetIndex = -1;
             for (int i = 0; i < roomBookings.size(); i++) {
-                if (roomBookings[i].userID == currentUser->userID && roomBookings[i].roomID == rID && roomBookings[i].date == bDate) {
+                if (roomBookings[i].userID == currentUser->userID &&
+                    roomBookings[i].roomID == rID &&
+                    roomBookings[i].date == bDate &&
+                    roomBookings[i].timeSlot == cancelSlot) {
                     targetIndex = i;
                     break;
                 }
             }
 
             if (targetIndex == -1) {
-                cout << "[ERROR] No matching room booking found!" << endl;
+                cout << "[ERROR] No matching room booking found for this Room, Date, and Time Slot!" << endl;
                 continue;
             }
 
             roomBookings.erase(roomBookings.begin() + targetIndex);
             saveAppointments(roomBookings);
             cout << "[SUCCESS] Room booking canceled successfully!" << endl;
+
         } else if (choice == 4) {
             cout << "\n[Active Room Bookings]" << endl;
             if (roomBookings.empty()) {
