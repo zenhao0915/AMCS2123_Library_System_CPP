@@ -130,6 +130,10 @@ int main() {
                 extraBlacklist(users, currentUser);
                 break;
             case 8: {
+                saveUsers(users, session.getCurrentUser());
+                saveBooks(books);
+                saveAppointments(roomBookings);
+                saveTransactions(transactions);
                 session.logoutUser();
                 break;
             }
