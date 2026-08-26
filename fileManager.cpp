@@ -25,9 +25,11 @@ void loadBooks(vector<Book> &books) {
     if (isEmpty) {
         ofstream outFile("books.txt");
         if (outFile) {
-            outFile << "sixseven|SixSeven67|sohai|67|0|0\n"
+            outFile << "sixseven|SixSeven67|LiuShiQi|67|0|0\n"
                     << "kapibala|Bara Story|Yun|10|0|0\n"
-                    << "noparking|Tar Dick|TarShit|67|0|0\n";
+                    << "bmt|Badminton|BWF|3|0|0\n"
+                    << "man|Mamba Out|Kobe|3|0|0\n"
+                    << "googlegm|Gemini|Google|5|0|0\n";
             outFile.close();
         }
     }
