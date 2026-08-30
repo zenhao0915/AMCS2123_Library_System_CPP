@@ -61,7 +61,7 @@ int main() {
             selectionRange = 2;
         }
         if (currentSelection < 0 || currentSelection > selectionRange) {
-            cout << "\nChoice out of range! Please enter a number between 1 and " << selectionRange << "." << endl;
+            cout << "\nChoice out of range! Please enter a number between 0 and " << selectionRange << "." << endl;
             continue;
         }
 

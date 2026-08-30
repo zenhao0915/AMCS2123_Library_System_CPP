@@ -165,7 +165,9 @@ void loadUsers(vector<User> &users) {
         u.isBlacklisted = (blacklistStr == "1");
 
         while (getline(ss, borrowedBooksStr, ',')) {
-            u.booksBorrowed.push_back(borrowedBooksStr);
+            if (!borrowedBooksStr.empty()) {
+                u.booksBorrowed.push_back(borrowedBooksStr);
+            }
         }
 
         users.push_back(u);

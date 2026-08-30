@@ -7,7 +7,6 @@
 #include <fstream>
 #include <sstream>
 #include <cctype>
-#include <vector>
 #include <functional>
 #include <cassert>
 #include <algorithm>
@@ -49,7 +48,7 @@ struct User {
 
     bool hasPermission() const {
         if (!isAdmin) {
-            cout << "[ERROR] User Has No Permisssion To Access!" << endl;
+            cout << "[ERROR] User Has No Permission To Access!" << endl;
             return false;
         }
         return true;
@@ -164,8 +163,15 @@ public:
         return nullptr;
     }
 
+
     void registerUser(vector<User> &users, const string &userID, const string &username,
                       const string &password) {
+
+        if (userID.empty() || username.empty() || password.empty()) {
+            cout << "[ERROR] Fields cannot be empty!" << endl;
+            return;
+        }
+
         constexpr hash<string> hasher;
         const User newUser(userID, username, hasher(password));
         if (isUserIdDuplicate(newUser.userID, users)) {
@@ -199,7 +205,6 @@ public:
         } else {
             cout << "[SUCCESSFUL] User Logged In!" << endl;
         }
-        loadUsers(users);
     }
 
     void logoutUser() {
