@@ -182,10 +182,23 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
                 cout << "No books in inventory." << endl;
                 continue;
             }
+
+            size_t maxIdLen = 0;
+            size_t maxNameLen = 0;
+            size_t maxAuthorLen = 0;
+
+            for (const auto &b : books) {
+                if (b.bookID.length() > maxIdLen) maxIdLen = b.bookID.length();
+                if (b.name.length() > maxNameLen) maxNameLen = b.name.length();
+                if (b.author.length() > maxAuthorLen) maxAuthorLen = b.author.length();
+            }
+
             cout << "--------------------------------------------------------" << endl;
             for (const auto &b : books) {
-                cout << "ID: " << b.bookID << " | Name: " << b.name
-                     << " | Author: " << b.author << " | Stock: " << b.stock << endl;
+                cout << "ID: " << left << setw(maxIdLen) << b.bookID
+                     << " | Name: " << left << setw(maxNameLen) << b.name
+                     << " | Author: " << left << setw(maxAuthorLen) << b.author
+                     << " | Stock: " << b.stock << endl;
             }
             cout << "--------------------------------------------------------" << endl;
         }
