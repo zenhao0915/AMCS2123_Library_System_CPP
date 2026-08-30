@@ -153,7 +153,6 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
                 }
             }
 
-            // Enhanced: Prompt and validate the time slot to cancel
             int cancelSlot;
             while (true) {
                 cout << "Select Time Slot to Cancel (1: Morning, 2: Afternoon, 3: Evening): ";
@@ -167,7 +166,6 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
                 }
             }
 
-            // Enhanced: Search for match including timeSlot
             int targetIndex = -1;
             for (int i = 0; i < roomBookings.size(); i++) {
                 if (roomBookings[i].userID == currentUser->userID &&

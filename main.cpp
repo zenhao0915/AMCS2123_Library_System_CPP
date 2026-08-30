@@ -56,7 +56,7 @@ int main() {
         }
         int selectionRange;
         if (session.hasUserLoggedIn()) {
-            selectionRange = size(modules);
+            selectionRange = size(modules) - 1;
         } else {
             selectionRange = 2;
         }
