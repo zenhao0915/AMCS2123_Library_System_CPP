@@ -23,7 +23,10 @@ void billingPayment(vector<User> &users, vector<Transaction> &transactions, User
         if (choice == 5) break;
 
         if (choice == 1) {
-            if (!currentUser->hasPermission()) continue;
+            if (!currentUser->hasPermission()) {
+                cout << "[ERROR] Access denied! Administrator privilege required." << endl;
+                continue;
+            }
 
             cout << "\n[Generate Overdue Fine]" << endl;
             cout << "Enter User ID: ";
