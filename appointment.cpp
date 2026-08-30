@@ -81,6 +81,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             }
 
             books[bookIndex].isReserved = true;
+            saveBooks(books);
             cout << "[SUCCESS] Book reserved successfully!" << endl;
         } else if (choice == 2) {
             cout << "\n[Book a Study Room]" << endl;

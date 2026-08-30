@@ -45,6 +45,7 @@ void extraBlacklist(vector<User> &users, User *currentUser) {
                 cout << "[WARNING] Member is already blacklisted." << endl;
             } else {
                 users[userIndex].isBlacklisted = true;
+                saveUsers(users, currentUser);
                 cout << "[SUCCESS] Member " << users[userIndex].userName << " has been blacklisted." << endl;
             }
         }
@@ -71,6 +72,7 @@ void extraBlacklist(vector<User> &users, User *currentUser) {
                 cout << "[WARNING] Member is not blacklisted." << endl;
             } else {
                 users[userIndex].isBlacklisted = false;
+                saveUsers(users, currentUser);
                 cout << "[SUCCESS] Member " << users[userIndex].userName << " has been reinstated." << endl;
             }
         }
