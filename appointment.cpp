@@ -14,7 +14,7 @@ static bool isValidDate(const string &dateStr) {
     const int month = stoi(dateStr.substr(3, 2));
     const int year = stoi(dateStr.substr(6, 4));
 
-    if (year != 2026) return false;
+    if (year != OPERATING_YEAR) return false;
     if (month < 1 || month > 12) return false;
 
     int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -52,6 +52,12 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
 
         if (choice == 1) {
             cout << "\n[Reserve an Out-of-Stock Book]" << endl;
+
+            if (currentUser->isBlacklisted) {
+                cout << "[ERROR] Blacklisted members cannot reserve books!" << endl;
+                continue;
+            }
+
             cout << "Enter Book ID to reserve: ";
             string bID;
             cin >> bID;
@@ -107,7 +113,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             while (true) {
                 cout << "Select Time Slot (1: Morning, 2: Afternoon, 3: Evening): ";
                 cin >> newBooking.timeSlot;
-                if (cin.fail() || newBooking.timeSlot < 1 || newBooking.timeSlot > 3) {
+                if (cin.fail() || newBooking.timeSlot < SLOT_MORNING || newBooking.timeSlot > SLOT_EVENING) {
                     clearInputBuffer();
                     cout << "[ERROR] Invalid slot selection!" << endl;
                 } else {
@@ -158,7 +164,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             while (true) {
                 cout << "Select Time Slot to Cancel (1: Morning, 2: Afternoon, 3: Evening): ";
                 cin >> cancelSlot;
-                if (cin.fail() || cancelSlot < 1 || cancelSlot > 3) {
+                if (cin.fail() || cancelSlot < SLOT_MORNING || cancelSlot > SLOT_EVENING) {
                     clearInputBuffer();
                     cout << "[ERROR] Invalid slot selection! Please enter 1, 2, or 3." << endl;
                 } else {
@@ -195,7 +201,7 @@ void appointmentManagement(vector<Book> &books, const vector<User> &users, vecto
             }
             cout << "--------------------------------------------------------" << endl;
             for (const auto &rb: roomBookings) {
-                string slotName = (rb.timeSlot == 1) ? "Morning" : (rb.timeSlot == 2) ? "Afternoon" : "Evening";
+                string slotName = (rb.timeSlot == SLOT_MORNING) ? "Morning" : (rb.timeSlot == SLOT_AFTERNOON) ? "Afternoon" : "Evening";
                 cout << "User: " << rb.userID << " | Room: " << rb.roomID
                         << " | Date: " << rb.date << " | Slot: " << slotName << endl;
             }

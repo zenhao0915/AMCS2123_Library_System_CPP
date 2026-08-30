@@ -95,9 +95,9 @@ void reportingStatistics(vector<Book> &books, vector<User> &users, vector<RoomBo
             int eveningSlots = 0;
 
             for (const auto &rb: roomBookings) {
-                if (rb.timeSlot == 1) morningSlots++;
-                else if (rb.timeSlot == 2) afternoonSlots++;
-                else if (rb.timeSlot == 3) eveningSlots++;
+                if (rb.timeSlot == SLOT_MORNING) morningSlots++;
+                else if (rb.timeSlot == SLOT_AFTERNOON) afternoonSlots++;
+                else if (rb.timeSlot == SLOT_EVENING) eveningSlots++;
             }
             string roomSpecs[3][3] = {
                 {"Slot 1", "Morning Session",   "08:00 AM - 12:00 PM"},

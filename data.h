@@ -13,6 +13,13 @@
 
 using namespace std;
 
+constexpr double FINE_RATE_PER_DAY = 0.50;   // RM charged per overdue day
+constexpr int MAX_BOOKS_BORROWED   = 5;      // Max books a member may borrow at once
+constexpr int OPERATING_YEAR       = 2026;   // Year accepted for room bookings
+constexpr int SLOT_MORNING         = 1;
+constexpr int SLOT_AFTERNOON       = 2;
+constexpr int SLOT_EVENING         = 3;
+
 struct Book {
     string bookID;
     string name;
@@ -38,7 +45,7 @@ struct User {
     }
 
     bool borrowBook(const Book &book) {
-        if (borrowedCount < 5) {
+        if (borrowedCount < MAX_BOOKS_BORROWED) {
             booksBorrowed.push_back(book.name);
             borrowedCount++;
             return true;

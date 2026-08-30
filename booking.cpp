@@ -69,12 +69,13 @@ void bookingService(vector<Book> &books, vector<User> &users, User *currentUser)
             books[bookIndex].stock--;
             if (currentUser->borrowBook(books[bookIndex])) {
                 books[bookIndex].borrowCount++;
+                books[bookIndex].isReserved = false; // release reservation now that it has been borrowed
                 saveUsers(users, currentUser);
                 saveBooks(books);
                 cout << "[SUCCESS] Book borrowed successfully!" << endl;
             } else {
                 books[bookIndex].stock++;
-                cout << "[ERROR] Book borrowed failed! Maximum Amount 5 Books Exceeded!" << endl;
+                cout << "[ERROR] Book borrowed failed! Maximum Amount " << MAX_BOOKS_BORROWED << " Books Exceeded!" << endl;
             }
         }
         else if (choice == 2) {

@@ -1,5 +1,9 @@
 #include "data.h"
 
+static double calculateFine(int days, double rate) {
+    return days * rate;
+}
+
 void billingPayment(vector<User> &users, vector<Transaction> &transactions, User *currentUser) {
     while (true) {
         cout << "\n--- Billing & Payment Processing Sub-Menu ---" << endl;
@@ -46,22 +50,22 @@ void billingPayment(vector<User> &users, vector<Transaction> &transactions, User
             }
 
             int overdueDays;
-            while (true) {
+            bool validDays;
+            do {
                 cout << "Enter Overdue Days: ";
                 cin >> overdueDays;
-                if (cin.fail() || overdueDays <= 0) {
+                validDays = !(cin.fail() || overdueDays <= 0);
+                if (!validDays) {
                     cin.clear();
                     cin.ignore(10000, '\n');
                     cout << "[ERROR] Overdue days must be greater than 0!" << endl;
-                } else {
-                    break;
                 }
-            }
+            } while (!validDays);
 
             Transaction tx;
             tx.txID = "TX" + to_string(transactions.size() + 1001);
             tx.userID = uID;
-            tx.fineAmount = overdueDays * 0.50; 
+            tx.fineAmount = calculateFine(overdueDays, FINE_RATE_PER_DAY);
             tx.paidAmount = 0.0;
             tx.isSettled = false;
 
